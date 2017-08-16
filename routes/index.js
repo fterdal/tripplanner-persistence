@@ -13,6 +13,9 @@ router.use('/restaurants', restaurantEndpoints);
 const activityEndpoints = require('./activities');
 router.use('/activities', activityEndpoints);
 
+const dayEndpoints = require('./days');
+router.use('/days', dayEndpoints);
+
 router.get('/', function(req, res, next) {
   Promise.all([
     Hotel.findAll(),
