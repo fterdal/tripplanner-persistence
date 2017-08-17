@@ -8,6 +8,12 @@
 
 var utilsModule = {
 
+  getApiPrefix: function (attractionType) {
+    return {hotel: "/hotels/",
+            restaurant: "/restaurants/",
+            activity: "/activities/" }[attractionType]
+  },
+
   // copies properties from source onto target object
   merge: function (source, target) {
     if (!source) return;

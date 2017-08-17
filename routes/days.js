@@ -80,6 +80,17 @@ router.get('/:id/activities', (req, res, next) => {
   .catch(next);
 })
 
+// Get all days and all of their associated attractions
+router.get('/extended', (req, res, next) => {
+  Day.findAll({
+    include: [Hotel, Restaurant, Activity]
+  })
+  .then( days => {
+    res.json(days);
+  })
+  .catch(next);
+})
+
 // Get a specific day
 router.get('/:id', (req, res, next) => {
   Day.findById(req.params.id)
@@ -98,6 +109,7 @@ router.get('/', (req, res, next) => {
   })
   .catch(next);
 })
+
 
 router.post('/', (req, res, next) => {
   Day.getLargestNumber()

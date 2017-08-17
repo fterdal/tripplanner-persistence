@@ -1,5 +1,5 @@
 'use strict';
-/* global $ dayModule */
+/* global $ dayModule utilsModule */
 
 /**
  * A module for managing multiple days & application state.
@@ -94,8 +94,8 @@ var tripModule = (function () {
 
     // TODO: Check to see if there are no days in the db; if so, add a day
     load: function () {
-      $.ajax('/days', {method:'get'})
-      .then ((days) =>{
+      $.ajax('/days/extended', {method:'get'})
+      .then ( days => {
         days.sort( (a, b) => {
           return a.number - b.number;
         });
@@ -111,10 +111,7 @@ var tripModule = (function () {
     switchTo: switchTo,
 
     addToCurrent: function (attraction) {
-      const lookup = {hotel: "/hotels/",
-                      restaurant: "/restaurants/",
-                      activity: "/activities/" }
-      $.ajax('/days/' + currentDay.id + lookup[attraction.type] + attraction.id,
+      $.ajax('/days/' + currentDay.id + utilsModule.getApiPrefix(attraction.type) + attraction.id,
               {method: 'PUT'})
       .then( () => {
         currentDay.addAttraction(attraction);
