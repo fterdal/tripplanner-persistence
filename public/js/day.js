@@ -130,6 +130,13 @@ var dayModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   Day.prototype.removeAttraction = function (attraction) {
     // removing from the day object
+
+    // $.ajax('/days/' + day.id
+    //         + utilsModule.getApiPrefix(attraction.type)
+    //         + attraction.id, {
+    //           method: 'DELETE'
+    //         })
+
     switch (attraction.type) {
       case 'hotel':
         this.hotel = null;

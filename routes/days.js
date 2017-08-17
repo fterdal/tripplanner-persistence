@@ -2,6 +2,19 @@ const Promise = require('bluebird');
 const router = require('express').Router();
 const { Day, Restaurant, Hotel, Activity } = require('../models');
 
+router.delete(':id/hotels', (req, res, next) => {
+  console.log('req.params.id:', req.params.id);
+  Day.findById(req.params.id)
+  .then( day => {
+    day.setHotel(null);
+    return day.save();
+  })
+  .then( () => {
+    res.sendStatus(201);
+  })
+  .catch(next)
+})
+
 // Get a day's restaurants
 router.get('/:id/restaurants', (req, res, next) => {
   Day.findById(req.params.id, {
@@ -47,6 +60,7 @@ router.put('/:id/restaurants/:restaurantid', (req, res, next) => {
   })
   .catch(next);
 })
+
 
 // TODO Add better error handling for the case when a user
 // enters an id for a non-existent day or activity.
