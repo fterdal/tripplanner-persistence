@@ -42,7 +42,12 @@ var tripModule = (function () {
     // before calling `addDay` or `deleteCurrentDay` that update the frontend (the UI), we need to make sure that it happened successfully on the server
   // ~~~~~~~~~~~~~~~~~~~~~~~
   $(function () {
-    $addButton.on('click', addDay);
+    $addButton.on('click', () => {
+      $.ajax('/days', {method: 'POST'})
+      .then( day => {
+        addDay(day);
+      })
+    });
     $removeButton.on('click', deleteCurrentDay);
   });
 
@@ -53,11 +58,12 @@ var tripModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   function addDay (day) {
     if (this && this.blur) this.blur(); // removes focus box from buttons
-    days.push(day);
+    const newDay = dayModule.create(day);
+    days.push(newDay);
     if (days.length === 1) {
-      currentDay = day;
+      currentDay = newDay;
     }
-    switchTo(day);
+    switchTo(newDay);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,8 +93,7 @@ var tripModule = (function () {
       return dayDb
       .then ((days) =>{
         for(var i=0; i<days.length;i++){
-
-         addDay(days[i]);
+          addDay(days[i]);
        }
       })
       // ~~~~~~~~~~~~~~~~~~~~~~~
