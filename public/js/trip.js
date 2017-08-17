@@ -51,14 +51,13 @@ var tripModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
     // `addDay` may need to take information now that we can persist days -- we want to display what is being sent from the DB
   // ~~~~~~~~~~~~~~~~~~~~~~~
-  function addDay () { 
+  function addDay (day) {
     if (this && this.blur) this.blur(); // removes focus box from buttons
-    var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
-    days.push(newDay);
+    days.push(day);
     if (days.length === 1) {
-      currentDay = newDay;
+      currentDay = day;
     }
-    switchTo(newDay);
+    switchTo(day);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,11 +83,17 @@ var tripModule = (function () {
   var publicAPI = {
 
     load: function () {
+      var dayDb = $.ajax('/days', {method:'get'})
+      return dayDb
+      .then ((days) =>{
+        for(var i=0; i<days.length;i++){
 
+         addDay(days[i]);
+       }
+      })
       // ~~~~~~~~~~~~~~~~~~~~~~~
         //If we are trying to load existing Days, then let's make a request to the server for the day. Remember this is async. For each day we get back what do we need to do to it?
       // ~~~~~~~~~~~~~~~~~~~~~~~
-      $(addDay);
     },
 
     switchTo: switchTo,
