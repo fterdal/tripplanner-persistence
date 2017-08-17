@@ -19,6 +19,20 @@ router.get('/:id/restaurants', (req, res, next) => {
   .catch(next);
 })
 
+// enters an id for a non-existent day or restaurant.
+router.put('/:id/hotels/:hotelid', (req, res, next) => {
+  let day = Day.findById(req.params.id);
+  let hotel = Hotel.findById(req.params.hotelid);
+  Promise.all([day, hotel])
+  .spread( (day, hotel) => {
+    return day.setHotel(hotel);
+  })
+  .then( () => {
+    res.sendStatus(201);
+  })
+  .catch(next);
+})
+
 // TODO Add better error handling for the case when a user
 // enters an id for a non-existent day or restaurant.
 router.put('/:id/restaurants/:restaurantid', (req, res, next) => {
