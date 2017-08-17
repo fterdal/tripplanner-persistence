@@ -11,6 +11,20 @@ router.get('/', (req, res, next) => {
   .catch(next);
 })
 
+// TODO Maybe this route isn't necessary?!
+router.post('/', (req, res, next) => {
+  const name = req.body.name,
+        price = req.body.price,
+        cuisine = req.body.cuisine;
+  Restaurant.create({
+    name, price, cuisine
+  })
+  .then( restaurant => {
+    res.json(restaurant);
+  })
+  .catch(next);
+})
+
 router.get('/:id', (req, res, next) => {
   Restaurant.findById(req.params.id)
   .then( restaurant => {
@@ -19,5 +33,7 @@ router.get('/:id', (req, res, next) => {
   })
   .catch(next);
 })
+
+
 
 module.exports = router;
