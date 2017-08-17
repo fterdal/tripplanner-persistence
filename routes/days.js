@@ -1,29 +1,56 @@
 const Promise = require('bluebird');
 const router = require('express').Router();
-const { Day } = require('../models');
+const { Day, Restaurant, Hotel, Activity } = require('../models');
+
+// Get a day's restaurants
+router.get('/:id/restaurants', (req, res, next) => {
+  Day.findById(req.params.id, {
+    include: [{
+      model: Restaurant
+    }]
+  })
+  .then( day => {
+    if (day) return day;
+    else throw new Error("Day Not Found");
+  })
+  .then( day => {
+    res.json(day);
+  })
+  .catch(next);
+})
+
+// Get a day's activities
+router.get('/:id/activities', (req, res, next) => {
+  Day.findById(req.params.id, {
+    include: [{
+      model: Activity
+    }]
+  })
+  .then( day => {
+    if (day) return day;
+    else throw new Error("Day Not Found");
+  })
+  .then( day => {
+    res.json(day);
+  })
+  .catch(next);
+})
+
+// Get a specific day
+router.get('/:id', (req, res, next) => {
+  Day.findById(req.params.id)
+  .then( day => {
+    if (day) res.json(day);
+    else res.sendStatus(404);
+  })
+  .catch(next);
+})
 
 // Get all days
 router.get('/', (req, res, next) => {
   Day.findAll()
   .then( days => {
     res.json(days);
-  })
-  .catch(next);
-})
-
-// router.get('/desc', (req, res, next) => {
-//   Day.getLargestNumber()
-//   .then( days => {
-//     res.json(days);
-//   })
-//   .catch(console.error.bind(console))
-// })
-
-router.get('/:id', (req, res, next) => {
-  Day.findById(req.params.id)
-  .then( day => {
-    if (day) res.json(day);
-    else res.sendStatus(404);
   })
   .catch(next);
 })
@@ -73,20 +100,3 @@ router.delete('/:id', (req, res, next) => {
 })
 
 module.exports = router;
-
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
