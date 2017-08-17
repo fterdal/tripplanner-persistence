@@ -19,6 +19,36 @@ router.get('/:id/restaurants', (req, res, next) => {
   .catch(next);
 })
 
+// TODO Add better error handling for the case when a user
+// enters an id for a non-existent day or restaurant.
+router.put('/:id/restaurants/:restaurantid', (req, res, next) => {
+  let day = Day.findById(req.params.id);
+  let restaurant = Restaurant.findById(req.params.restaurantid);
+  Promise.all([day, restaurant])
+  .spread( (day, restaurant) => {
+    return day.addRestaurant(restaurant);
+  })
+  .then( () => {
+    res.sendStatus(201);
+  })
+  .catch(next);
+})
+
+// TODO Add better error handling for the case when a user
+// enters an id for a non-existent day or activity.
+router.put('/:id/activities/:activityid', (req, res, next) => {
+  let day = Day.findById(req.params.id);
+  let activity = Activity.findById(req.params.activityid);
+  Promise.all([day, activity])
+  .spread( (day, activity) => {
+    return day.addActivity(activity);
+  })
+  .then( () => {
+    res.sendStatus(201);
+  })
+  .catch(next);
+})
+
 // Get a day's activities
 router.get('/:id/activities', (req, res, next) => {
   Day.findById(req.params.id, {
