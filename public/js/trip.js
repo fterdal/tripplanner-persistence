@@ -92,10 +92,13 @@ var tripModule = (function () {
 
   var publicAPI = {
 
+    // TODO: Check to see if there are no days in the db; if so, add a day
     load: function () {
-      var dayDb = $.ajax('/days', {method:'get'})
-      return dayDb
+      $.ajax('/days', {method:'get'})
       .then ((days) =>{
+        days.sort( (a, b) => {
+          return a.number - b.number;
+        });
         for(var i=0; i<days.length;i++){
           addDay(days[i]);
        }
@@ -108,7 +111,14 @@ var tripModule = (function () {
     switchTo: switchTo,
 
     addToCurrent: function (attraction) {
-      currentDay.addAttraction(attraction);
+      const lookup = {hotel: "/hotels/",
+                      restaurant: "/restaurants/",
+                      activity: "/activities/" }
+      $.ajax('/days/' + currentDay.id + lookup[attraction.type] + attraction.id,
+              {method: 'PUT'})
+      .then( () => {
+        currentDay.addAttraction(attraction);
+      })
     },
 
     removeFromCurrent: function (attraction) {
