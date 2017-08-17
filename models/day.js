@@ -10,7 +10,6 @@ let Day = db.define('day', {
 });
 
 Day.getLargestNumber = function() {
-  console.log("HELLO WORLD!!!");
   return Day.findAll({
     order: [
       ['number', 'DESC']
